@@ -32,7 +32,7 @@ OUTPUT=$3
 BUNDLE_ID=
 
 case $MODE in
-deb | ipa | ipa-hv | ipa-signed )
+deb | ipa | ipa-hv | ipa-signed ipa-troll)
 	NAME="UTM"
 	BUNDLE_ID="com.utmapp.UTM"
 	INPUT_APP="$INPUT/Products/Applications/UTM.app"
@@ -208,9 +208,12 @@ EOL
 	create_deb "$INPUT" "$OUTPUT" "$FAKEENT"
 	rm "$FAKEENT"
 	;;
-ipa | ipa-hv )
+ipa | ipa-hv |ipa-troll)
 	ENABLE_JIT="true"
 	if [ "$MODE" == "ipa-hv" ]; then
+		ENABLE_JIT="false"
+	fi
+	if [ "$MODE" == "ipa-troll" ]; then
 		ENABLE_JIT="false"
 	fi
 	FAKEENT="/tmp/fakeent.$$.plist"
@@ -237,8 +240,6 @@ ipa | ipa-hv )
 	<key>com.apple.system.diagnostics.iokit-properties</key>
 	<true/>
 	<key>com.apple.vm.device-access</key>
-	<true/>
-	<key>com.apple.private.hypervisor</key>
 	<true/>
 	<key>com.apple.private.memorystatus</key>
 	<true/>
